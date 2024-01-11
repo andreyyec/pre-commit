@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+
+from argparse import Namespace
+
+import argparse
+import os
+
+
+def get_atlantis_config_file(version, config, projects):
+    return f"""version: {version}
+{config}
+{projects}
+"""
+
+
+def get_config_section(config_file_path):
+    section_string = read_file(config_file_path)
+    return f"\n{section_string}" if section_string else ""
+
+
+def get_projects_section(folders: list, workspace_prefix: str) -> str:
+    section_string = "projects: \n"
+    prefix = f"{workspace_prefix}-" if workspace_prefix else ""
+
+    for folder in folders:
+        section_string += get_project_item(folder, prefix)
+
+    return f"\n{section_string}" if section_string else ""
+
+
+def get_project_item(folder_name: str, ws_prefix: str) -> str:
+    return f"""  - name: {folder_name}
+    dir: ./{folder_name}
+    workspace: {ws_prefix}{folder_name}
+    plan_requirements: [mergeable]
+    apply_requirements: [mergeable, approved, undiverged]
+"""
+
+
+def list_folders(directory) -> list:
+    try:
+        # List non-hidden folders in the specified directory
+        return [folder for folder in os.listdir(directory) if os.path.isdir(os.path.join(directory, folder)) and not folder.startswith('.')]
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+def read_file(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+            return content
+    except FileNotFoundError:
+        print(f"Error: File not found at {file_path}")
+        return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+def write_file(file_path, content):
+    try:
+        with open(file_path, 'w') as file:
+            file.write(content)
+        print(f"File successfully written to {file_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+def main(arguments: Namespace) -> None:
+    folders = list_folders(args.directory)
+
+    config_section = get_config_section(args.config_file)
+    projects_section = get_projects_section(folders, arguments.prefix)
+
+    if not any([config_section, projects_section]):
+        raise ValueError("Unable to get configuration or projects to generate the configuration.")
+
+    write_file(args.output, get_atlantis_config_file(arguments.version, config_section, projects_section))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate atlantis yaml config file")
+
+    parser.add_argument("-c", "--config_file", default=f"{os.getcwd()}/atlantis.cfg", help="Additional atlantis configuration to be added.")
+    parser.add_argument("-d", "--directory", default=os.getcwd(), help="Path where the project folders are hosted. Defaults to current directory.")
+    parser.add_argument("-o", "--output", default=f"{os.getcwd()}/atlantis.yaml", help="Output file to be generated. Defaults to 'atlantis.yaml' on current directory.")
+    parser.add_argument("-p", "--prefix", default="", help="Workspace name prefix. Will be included in all workspace names.")
+    parser.add_argument("-v", "--version", default="3", help="Atlantis yaml version. Defaults to version 3.")
+
+    args = parser.parse_args()
+
+    main(args)
