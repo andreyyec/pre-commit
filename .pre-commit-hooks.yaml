@@ -1,7 +1,7 @@
 - id: atlantis-config-generate
   name: Atlantis config generate
   description: Generates atlantis.yaml config file based on the workspace directories
-  entry: hooks/atlantis-config-generate
+  entry: atlantis-yaml-generate
   language: python
   types: [python]
 - id: tfsort
