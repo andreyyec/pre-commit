@@ -1,8 +1,8 @@
 - id: atlantis-yaml-generate
   name: Atlantis yaml generate
   description: Generates atlantis.yaml config file based on the workspace directories
-  entry:  pyke_hooks/atlantis-yaml-generate.py
-  language: python
+  entry:  atlantis-yaml-generate
+  language: system
   types: [python]
   pass_filenames: false
   always_run: true
