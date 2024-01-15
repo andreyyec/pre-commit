@@ -13,6 +13,7 @@
   entry: hooks/atlantis-yaml-generate.sh
   language: script
   always_run: true
+  pass_filenames: false
 
 - id: tfsort
   name: tfsort
