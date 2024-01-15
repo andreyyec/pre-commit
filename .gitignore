@@ -1,6 +1,10 @@
 # Python
 venv
 
+# Build
+buid
+dist
+
 # IDE
 .idea
 .vscode
