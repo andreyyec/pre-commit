@@ -10,7 +10,7 @@
 - id: atlantis-yaml-generate
   name: Atlantis Yaml Generate
   description: Generates the atlantis.yaml file based on the current repository files/folders.
-  entry: hooks/atlantis-yaml-generate.sh
+  entry: pyke_hooks/atlantis-yaml-generate.sh
   language: script
   always_run: true
   pass_filenames: false
