@@ -15,6 +15,13 @@ class CustomDumper(yaml.Dumper):
         return super(CustomDumper, self).increase_indent(flow, False)
 
 
+def check_tuple_key_prefix(pair: tuple, prefix: str):
+    key, _ = pair
+    if key.startswith(prefix):
+        return True
+    return False
+
+
 def generate_projects_config(project_names: list[str], project_settings: dict) -> list:
     parent_settings = project_settings["projects"]
     per_project_settings = get_project_specific_settings(project_settings)
@@ -42,10 +49,12 @@ def generate_project_config(
 
 
 def get_project_mandatory_settings(project_name: str) -> dict:
+    prefix = f"{arg_ws_prefix}-" if arg_ws_prefix else ''
+
     return {
         "name": project_name,
         "dir": f"{arg_relative_path}{project_name}",
-        "workspace": f"{arg_ws_prefix}{project_name}"
+        "workspace": f"{prefix}{project_name}"
     }
 
 
@@ -117,13 +126,6 @@ def read_file(file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
-
-
-def check_tuple_key_prefix(pair: tuple, prefix: str):
-    key, _ = pair
-    if key.startswith(prefix):
-        return True
-    return False
 
 
 def write_file(file_path, content):

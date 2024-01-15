@@ -1,11 +1,19 @@
+#- id: atlantis-yaml-generate
+#  name: Atlantis yaml generate
+#  description: Generates atlantis.yaml config file based on the workspace directories
+#  entry:  atlantis-yaml-generate
+#  language: system
+#  types: [python]
+#  pass_filenames: false
+#  always_run: true
+
 - id: atlantis-yaml-generate
-  name: Atlantis yaml generate
-  description: Generates atlantis.yaml config file based on the workspace directories
-  entry:  atlantis-yaml-generate
-  language: system
-  types: [python]
-  pass_filenames: false
+  name: Atlantis Yaml Generate
+  description: Generates the atlantis.yaml file based on the current repository files/folders.
+  entry: hooks/atlantis-yaml-generate.sh
+  language: script
   always_run: true
+
 - id: tfsort
   name: tfsort
   description: Run tfsort on all variables.tf and outputs.tf

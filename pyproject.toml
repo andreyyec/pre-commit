@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pyke_hooks"
-version = "0.1.1"
-description = ""
+version = "0.1.2"
+description = "Custom tailored pre-commit hooks"
 authors = ["Andrey Castro <andreyyec@gmail.com>"]
 license = "MIT"
 readme = "README.md"
